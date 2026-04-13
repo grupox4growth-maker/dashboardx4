@@ -1,0 +1,19 @@
+{
+  "version": 2,
+  "services": {
+    "backend": {
+      "type": "node",
+      "env": {
+        "PORT": "3000"
+      },
+      "buildCommand": "npm install",
+      "startCommand": "npm start",
+      "source": "./backend"
+    },
+    "frontend": {
+      "type": "static",
+      "buildCommand": "npm run build",
+      "source": "./frontend/build"
+    }
+  }
+}
