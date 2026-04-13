@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>X4GROWTH · Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ═══════════════════════ LOGIN ═══════════════════════ -->
+<div id="login-view" class="login-screen">
+  <div class="login-bg-grid"></div>
+  <div class="login-glow"></div>
+  <div class="login-card">
+    <div class="login-logo-wrap">
+      <img src="/x4-logo.png" alt="X4GROWTH" class="login-logo">
+    </div>
+    <div class="login-agency">X4GROWTH</div>
+    <div class="login-subtitle">Marketing Intelligence Platform</div>
+    <div class="login-fields">
+      <div class="lf-group">
+        <label>Usuário</label>
+        <input type="text" id="username" placeholder="seu usuário" autocomplete="username">
+      </div>
+      <div class="lf-group">
+        <label>Senha</label>
+        <input type="password" id="password" placeholder="••••••••" autocomplete="current-password">
+      </div>
+      <button id="login-btn">Entrar</button>
+    </div>
+    <div class="login-footer">Acesso exclusivo · Dados protegidos</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ APP ═══════════════════════ -->
+<div id="app-view" class="app" style="display:none">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sb-brand">
+      <img src="/x4-logo.png" alt="X4GROWTH" class="sb-logo">
+      <div class="sb-agency-name">X4GROWTH</div>
+    </div>
+
+    <div class="sb-client-badge" id="sb-client-badge">
+      <div class="sb-client-avatar" id="sb-client-avatar">?</div>
+      <div>
+        <div class="sb-client-name" id="sb-client-name">Carregando...</div>
+        <div class="sb-client-role" id="sb-client-role">Cliente</div>
+      </div>
+    </div>
+
+    <nav class="sb-nav">
+      <div class="sb-nav-label">Plataformas</div>
+      <a class="sb-link active" data-page="meta" href="#">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm-1 14.5v-9l7 4.5-7 4.5z"/></svg>
+        <span>Meta Ads</span>
+        <div class="sb-badge meta-badge">AO VIVO</div>
+      </a>
+      <a class="sb-link" data-page="google" href="#">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+        <span>Google Ads</span>
+      </a>
+      <div class="sb-nav-label" style="margin-top:12px">Relatórios</div>
+      <a class="sb-link" data-page="financeiro" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        <span>Financeiro</span>
+      </a>
+    </nav>
+
+    <div class="sb-bottom">
+      <div class="sb-admin-btn" id="admin-panel-btn" style="display:none">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+        <span>Admin</span>
+      </div>
+      <button class="sb-logout" id="logout-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Sair
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+
+    <!-- ══ META ADS PAGE ══ -->
+    <section id="page-meta" class="page-section active">
+      <div class="page-header">
+        <div>
+          <div class="ph-eyebrow">
+            <div class="ph-dot blue-dot"></div>
+            Meta Ads
+          </div>
+          <h1 class="ph-title">Performance das Campanhas</h1>
+        </div>
+        <div class="ph-filters">
+          <div class="date-shortcuts">
+            <button class="ds-btn active" data-days="0">Hoje</button>
+            <button class="ds-btn" data-days="7">7 dias</button>
+            <button class="ds-btn" data-days="30">30 dias</button>
+            <button class="ds-btn" data-days="-1">Personalizado</button>
+          </div>
+          <div class="custom-dates" id="meta-custom-dates" style="display:none">
+            <input type="date" id="meta-start-date">
+            <span>até</span>
+            <input type="date" id="meta-end-date">
+          </div>
+          <button class="btn-fetch" id="meta-fetch-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+            Atualizar
+          </button>
+        </div>
+      </div>
+
+      <div id="meta-loading" class="loading-state" style="display:none">
+        <div class="spinner"></div>
+        <p>Buscando dados da Meta…</p>
+      </div>
+
+      <!-- METRICS GRID -->
+      <div class="metrics-grid" id="meta-metrics">
+        <div class="metric-card hl">
+          <div class="mc-icon blue-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          <div class="mc-label">Valor Investido</div>
+          <div class="mc-value" id="m-spent">R$ 0,00</div>
+          <div class="mc-sub" id="m-spent-sub">—</div>
+        </div>
+        <div class="metric-card">
+          <div class="mc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <div class="mc-label">Visitas (Cliques)</div>
+          <div class="mc-value" id="m-clicks">0</div>
+          <div class="mc-sub">cliques únicos no link</div>
+        </div>
+        <div class="metric-card">
+          <div class="mc-icon purple-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </div>
+          <div class="mc-label">Seguidores</div>
+          <div class="mc-value" id="m-followers">0</div>
+          <div class="mc-sub" id="m-cost-follower">Custo/seguidor: —</div>
+        </div>
+        <div class="metric-card">
+          <div class="mc-icon green-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          </div>
+          <div class="mc-label">Novas Mensagens</div>
+          <div class="mc-value" id="m-messages">0</div>
+          <div class="mc-sub" id="m-cost-msg">Custo/mensagem: —</div>
+        </div>
+        <div class="metric-card">
+          <div class="mc-icon amber-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+          </div>
+          <div class="mc-label">Leads Formulário</div>
+          <div class="mc-value" id="m-leads">0</div>
+          <div class="mc-sub" id="m-cost-lead">Custo/lead: —</div>
+        </div>
+        <div class="metric-card">
+          <div class="mc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <div class="mc-label">Alcance</div>
+          <div class="mc-value" id="m-reach">0</div>
+          <div class="mc-sub" id="m-impressions-sub">Impressões: —</div>
+        </div>
+        <div class="metric-card">
+          <div class="mc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          </div>
+          <div class="mc-label">CPM</div>
+          <div class="mc-value" id="m-cpm">R$ 0,00</div>
+          <div class="mc-sub">Custo por mil impressões</div>
+        </div>
+        <div class="metric-card">
+          <div class="mc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+          <div class="mc-label">CTR Único</div>
+          <div class="mc-value" id="m-ctr">0%</div>
+          <div class="mc-sub">Taxa de cliques</div>
+        </div>
+      </div>
+
+      <!-- CHARTS ROW -->
+      <div class="charts-row">
+        <div class="chart-card">
+          <div class="card-title">Investimento por Campanha</div>
+          <div class="chart-wrap"><canvas id="meta-chart-campaigns"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="card-title">Distribuição de Resultados</div>
+          <div class="chart-wrap"><canvas id="meta-chart-results"></canvas></div>
+        </div>
+      </div>
+
+      <!-- CAMPAIGNS TABLE -->
+      <div class="table-card">
+        <div class="table-header">
+          <div class="card-title">Detalhes por Campanha</div>
+          <div class="th-pill" id="meta-count-pill">0 campanhas</div>
+        </div>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Campanha</th>
+                <th>Investido</th>
+                <th>Mensagens</th>
+                <th>Custo/Msg</th>
+                <th>Alcance</th>
+                <th>Impressões</th>
+                <th>CPM</th>
+                <th>Cliques</th>
+                <th>CTR</th>
+              </tr>
+            </thead>
+            <tbody id="meta-campaigns-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- AI ANALYSIS -->
+      <div class="ai-card" id="meta-ai-card">
+        <div class="ai-header">
+          <div class="ai-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
+          </div>
+          <div>
+            <div class="ai-title">Análise de Performance · IA</div>
+            <div class="ai-subtitle">Gerado automaticamente com base nos dados do período</div>
+          </div>
+          <button class="btn-ai-generate" id="meta-ai-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            Analisar com IA
+          </button>
+        </div>
+        <div class="ai-body" id="meta-ai-body">
+          <div class="ai-placeholder">Clique em <strong>Analisar com IA</strong> para gerar uma análise detalhada dos dados exibidos.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ GOOGLE ADS PAGE ══ -->
+    <section id="page-google" class="page-section">
+      <div class="page-header">
+        <div>
+          <div class="ph-eyebrow">
+            <div class="ph-dot green-dot"></div>
+            Google Ads
+          </div>
+          <h1 class="ph-title">Performance Google</h1>
+        </div>
+        <div class="ph-filters">
+          <div class="date-shortcuts" id="google-shortcuts">
+            <button class="ds-btn active" data-days="0">Hoje</button>
+            <button class="ds-btn" data-days="7">7 dias</button>
+            <button class="ds-btn" data-days="30">30 dias</button>
+            <button class="ds-btn" data-days="-1">Personalizado</button>
+          </div>
+          <div class="custom-dates" id="google-custom-dates" style="display:none">
+            <input type="date" id="google-start-date">
+            <span>até</span>
+            <input type="date" id="google-end-date">
+          </div>
+          <button class="btn-fetch" id="google-fetch-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+            Atualizar
+          </button>
+        </div>
+      </div>
+
+      <div id="google-loading" class="loading-state" style="display:none">
+        <div class="spinner"></div>
+        <p>Buscando dados do Google Ads…</p>
+      </div>
+
+      <!-- GOOGLE METRICS -->
+      <div class="metrics-grid" id="google-metrics">
+        <div class="metric-card hl green-hl">
+          <div class="mc-icon green-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          <div class="mc-label">Investimento</div>
+          <div class="mc-value" id="g-spent">R$ 0,00</div>
+          <div class="mc-sub" id="g-spent-sub">—</div>
+        </div>
+        <div class="metric-card">
+          <div class="mc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </div>
+          <div class="mc-label">Visualizações</div>
+          <div class="mc-value" id="g-impressions">0</div>
+          <div class="mc-sub">impressões totais</div>
+        </div>
+        <div class="metric-card">
+          <div class="mc-icon blue-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+          </div>
+          <div class="mc-label">Cliques</div>
+          <div class="mc-value" id="g-clicks">0</div>
+          <div class="mc-sub" id="g-ctr-sub">CTR: —</div>
+        </div>
+        <div class="metric-card">
+          <div class="mc-icon amber-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <div class="mc-label">Custo por Clique</div>
+          <div class="mc-value" id="g-cpc">R$ 0,00</div>
+          <div class="mc-sub">CPC médio</div>
+        </div>
+        <div class="metric-card">
+          <div class="mc-icon purple-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+          <div class="mc-label">Conversões</div>
+          <div class="mc-value" id="g-conversions">0</div>
+          <div class="mc-sub" id="g-cost-conv">Custo/conversão: —</div>
+        </div>
+        <div class="metric-card">
+          <div class="mc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <div class="mc-label">Custo por Cidade</div>
+          <div class="mc-value" id="g-cities">0</div>
+          <div class="mc-sub">cidades ativas</div>
+        </div>
+      </div>
+
+      <!-- CHARTS -->
+      <div class="charts-row">
+        <div class="chart-card">
+          <div class="card-title">Cliques por Dia</div>
+          <div class="chart-wrap"><canvas id="google-chart-clicks"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="card-title">Conversões por Cidade (Top 5)</div>
+          <div class="chart-wrap"><canvas id="google-chart-cities"></canvas></div>
+        </div>
+      </div>
+
+      <!-- KEYWORDS TABLE -->
+      <div class="table-card">
+        <div class="table-header">
+          <div class="card-title">Principais Palavras-chave</div>
+          <div class="th-pill" id="google-kw-pill">0 palavras</div>
+        </div>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Palavra-chave</th>
+                <th>Pesquisas</th>
+                <th>Cliques</th>
+                <th>Conversões</th>
+                <th>Custo</th>
+                <th>CTR</th>
+                <th>CPC</th>
+              </tr>
+            </thead>
+            <tbody id="google-kw-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- AI ANALYSIS GOOGLE -->
+      <div class="ai-card" id="google-ai-card">
+        <div class="ai-header">
+          <div class="ai-icon green-ai">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
+          </div>
+          <div>
+            <div class="ai-title">Análise de Performance · IA</div>
+            <div class="ai-subtitle">Baseado nos dados do Google Ads do período selecionado</div>
+          </div>
+          <button class="btn-ai-generate green-ai-btn" id="google-ai-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            Analisar com IA
+          </button>
+        </div>
+        <div class="ai-body" id="google-ai-body">
+          <div class="ai-placeholder">Clique em <strong>Analisar com IA</strong> para gerar uma análise detalhada dos dados exibidos.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ FINANCEIRO PAGE ══ -->
+    <section id="page-financeiro" class="page-section">
+      <div class="page-header">
+        <div>
+          <div class="ph-eyebrow">
+            <div class="ph-dot amber-dot"></div>
+            Financeiro
+          </div>
+          <h1 class="ph-title">Dashboard Financeiro</h1>
+        </div>
+        <div class="ph-filters">
+          <select id="fin-sdr-filter">
+            <option value="">Todos os SDRs</option>
+          </select>
+          <select id="fin-fonte-filter">
+            <option value="">Todas as fontes</option>
+          </select>
+          <input type="date" id="fin-start-date">
+          <span style="color:var(--text-3);font-size:13px">até</span>
+          <input type="date" id="fin-end-date">
+          <button class="btn-fetch amber-btn" id="fin-fetch-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+            Filtrar
+          </button>
+        </div>
+      </div>
+
+      <div id="fin-loading" class="loading-state" style="display:none">
+        <div class="spinner amber-spinner"></div>
+        <p>Carregando dados financeiros…</p>
+      </div>
+
+      <div class="metrics-grid" id="fin-metrics">
+        <div class="metric-card amber-hl">
+          <div class="mc-icon amber-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          <div class="mc-label">Total Faturado</div>
+          <div class="mc-value" id="f-faturado">R$ 0,00</div>
+          <div class="mc-sub" id="f-procs">0 procedimentos</div>
+        </div>
+        <div class="metric-card">
+          <div class="mc-icon green-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+          </div>
+          <div class="mc-label">Leads Convertidos</div>
+          <div class="mc-value" id="f-convertidos">0</div>
+          <div class="mc-sub" id="f-conv-rate">de 0 leads · 0% conversão</div>
+        </div>
+        <div class="metric-card">
+          <div class="mc-icon blue-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+          </div>
+          <div class="mc-label">Ticket Médio</div>
+          <div class="mc-value" id="f-ticket">R$ 0,00</div>
+          <div class="mc-sub">por procedimento</div>
+        </div>
+        <div class="metric-card">
+          <div class="mc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </div>
+          <div class="mc-label">Faturado Hoje</div>
+          <div class="mc-value" id="f-hoje">R$ 0,00</div>
+          <div class="mc-sub" id="f-hoje-sub">sem movimento</div>
+        </div>
+      </div>
+
+      <div class="charts-row">
+        <div class="chart-card">
+          <div class="card-title">Faturamento Mensal</div>
+          <div class="chart-wrap"><canvas id="fin-chart-mensal"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="card-title">Origem dos Leads</div>
+          <div class="chart-wrap"><canvas id="fin-chart-fonte"></canvas></div>
+        </div>
+      </div>
+
+      <div class="rank-row">
+        <div class="rank-card">
+          <div class="card-title">Top SDRs por Faturamento</div>
+          <div id="fin-sdr-rank"></div>
+        </div>
+        <div class="rank-card">
+          <div class="card-title">Top Procedimentos</div>
+          <div id="fin-proc-rank"></div>
+        </div>
+      </div>
+
+      <div class="table-card">
+        <div class="table-header">
+          <div class="card-title">Registros de Leads</div>
+          <div class="th-pill amber-pill" id="fin-count-pill">0 registros</div>
+        </div>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>SDR</th>
+                <th>Fonte</th>
+                <th>Procedimento</th>
+                <th>Fechamento</th>
+                <th>Valor</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="fin-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ═══════════════════════ ADMIN MODAL ═══════════════════════ -->
+<div class="modal-overlay" id="admin-modal" style="display:none">
+  <div class="modal-box wide-modal">
+    <div class="modal-head">
+      <div class="modal-title">Painel Administrativo</div>
+      <button class="modal-close" id="close-admin-modal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-tabs">
+      <button class="mtab active" data-tab="clients">Clientes</button>
+      <button class="mtab" data-tab="accounts">Contas de Anúncio</button>
+      <button class="mtab" data-tab="api">API</button>
+    </div>
+    <div class="mtab-content active" data-tab="clients">
+      <div class="modal-toolbar">
+        <span class="modal-sec-title">Gerenciar Clientes</span>
+        <button class="btn-add" id="add-client-btn">+ Adicionar Cliente</button>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Nome</th><th>Senha</th><th>Ações</th></tr></thead>
+          <tbody id="clients-table"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="mtab-content" data-tab="accounts">
+      <div class="modal-toolbar">
+        <select id="client-select" style="max-width:200px">
+          <option value="">Todos os clientes</option>
+        </select>
+        <button class="btn-add" id="add-account-btn">+ Adicionar Conta</button>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Cliente</th><th>Nome da Conta</th><th>ID da Conta</th><th>Ações</th></tr></thead>
+          <tbody id="accounts-table"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="mtab-content" data-tab="api">
+      <div class="modal-sec-title" style="margin-bottom:12px">Token da API Facebook</div>
+      <textarea id="api-key" rows="5" placeholder="Cole o token de acesso aqui..."></textarea>
+      <button class="btn-primary" id="save-api-btn" style="margin-top:12px;width:auto;padding:8px 24px">Salvar Token</button>
+    </div>
+  </div>
+</div>
+
+<!-- CLIENT MODAL -->
+<div class="modal-overlay" id="client-modal" style="display:none">
+  <div class="modal-box">
+    <div class="modal-head">
+      <div class="modal-title" id="client-modal-title">Adicionar Cliente</div>
+      <button class="modal-close" id="close-client-modal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <input type="hidden" id="client-id">
+    <div class="modal-field">
+      <label>Nome do Cliente</label>
+      <input type="text" id="client-name" placeholder="Ex: Selleto Odonto">
+    </div>
+    <div class="modal-field">
+      <label>Senha</label>
+      <input type="password" id="client-password" placeholder="Senha de acesso">
+    </div>
+    <div class="modal-field">
+      <label>URL do Google Sheets (Financeiro)</label>
+      <input type="text" id="client-sheets-url" placeholder="https://docs.google.com/spreadsheets/...">
+    </div>
+    <button class="btn-primary" id="save-client-btn">Salvar Cliente</button>
+  </div>
+</div>
+
+<!-- ACCOUNT MODAL -->
+<div class="modal-overlay" id="account-modal" style="display:none">
+  <div class="modal-box">
+    <div class="modal-head">
+      <div class="modal-title" id="account-modal-title">Adicionar Conta de Anúncio</div>
+      <button class="modal-close" id="close-account-modal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <input type="hidden" id="account-id">
+    <div class="modal-field">
+      <label>Cliente</label>
+      <select id="account-client-select">
+        <option value="">Selecione um cliente</option>
+      </select>
+    </div>
+    <div class="modal-field">
+      <label>Nome da Conta</label>
+      <input type="text" id="account-name" placeholder="Ex: Selleto Principal">
+    </div>
+    <div class="modal-field">
+      <label>ID da Conta Facebook</label>
+      <input type="text" id="account-id-input" placeholder="act_000000000000">
+    </div>
+    <button class="btn-primary" id="save-account-btn">Salvar Conta</button>
+  </div>
+</div>
+
+<script type="module" src="main.js"></script>
+</body>
+</html>
