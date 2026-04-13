@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>X4GROWTH - Marketing Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="login-container" id="login-view">
+        <div class="login-box">
+            <div class="logo-container">
+                <img src="/x4-logo.png" alt="X4GROWTH Logo" class="logo">
+            </div>
+            <h1>X4GROWTH</h1>
+            <input type="text" id="username" placeholder="Usuário">
+            <input type="password" id="password" placeholder="Senha">
+            <button id="login-btn">Entrar</button>
+        </div>
+    </div>
+
+    <div class="dashboard" id="dashboard-view">
+        <div class="header">
+            <div class="brand">
+                <img src="/x4-logo.png" alt="X4GROWTH Logo" width="40" height="40">
+                <h1 style="margin-left: 1rem;">X4GROWTH</h1>
+            </div>
+            <button class="logout-btn" id="logout-btn">Sair</button>
+        </div>
+
+        <div class="filters">
+            <div class="filter-row">
+                <select id="account-select">
+                    <option value="">Selecione a conta de anúncio</option>
+                </select>
+                <select id="campaign-select" disabled>
+                    <option value="">Selecione a campanha</option>
+                </select>
+                <select id="ad-select" disabled>
+                    <option value="">Selecione o anúncio</option>
+                </select>
+            </div>
+            <div class="filter-row">
+                <div class="date-picker">
+                    <span>De:</span>
+                    <input type="text" id="start-date" placeholder="AAAA-MM-DD">
+                    <span>até:</span>
+                    <input type="text" id="end-date" placeholder="AAAA-MM-DD">
+                </div>
+                <button id="fetch-data-btn">Ver Dados</button>
+            </div>
+        </div>
+
+        <div class="data-container">
+            <div class="metric-card">
+                <h3>Valor Usado</h3>
+                <div class="metric-value" id="amount-spent">R$ 0,00</div>
+                <p class="metric-description">Total investido no período</p>
+            </div>
+            <div class="metric-card">
+                <h3>Mensagens Iniciadas</h3>
+                <div class="metric-value" id="messages">0</div>
+                <p class="metric-description">Conversas iniciadas</p>
+            </div>
+            <div class="metric-card">
+                <h3>Custo por Resultado</h3>
+                <div class="metric-value" id="cost-per-result">R$ 0,00</div>
+                <p class="metric-description">Custo médio por mensagem</p>
+            </div>
+            <div class="metric-card">
+                <h3>Alcance Total</h3>
+                <div class="metric-value" id="reach">0</div>
+                <p class="metric-description">Pessoas que viram o anúncio</p>
+            </div>
+            <div class="metric-card">
+                <h3>Impressões</h3>
+                <div class="metric-value" id="impressions">0</div>
+                <p class="metric-description">Número de vezes que o anúncio foi visto</p>
+            </div>
+            <div class="metric-card">
+                <h3>CPM</h3>
+                <div class="metric-value" id="cpm">R$ 0,00</div>
+                <p class="metric-description">Custo por mil impressões</p>
+            </div>
+            <div class="metric-card">
+                <h3>Cliques Únicos</h3>
+                <div class="metric-value" id="unique-clicks">0</div>
+                <p class="metric-description">Pessoas que clicaram</p>
+            </div>
+            <div class="metric-card">
+                <h3>CTR Único</h3>
+                <div class="metric-value" id="unique-ctr">0%</div>
+                <p class="metric-description">Taxa de cliques única</p>
+            </div>
+
+            <div class="chart-container">
+                <canvas id="metrics-chart"></canvas>
+            </div>
+
+            <div id="campaigns-table-container">
+                <h2>Detalhes das Campanhas</h2>
+                <table id="campaigns-table">
+                    <thead>
+                        <tr>
+                            <th>Campanha</th>
+                            <th>Valor Usado</th>
+                            <th>Mensagens</th>
+                            <th>Custo/Resultado</th>
+                            <th>Alcance</th>
+                            <th>Impressões</th>
+                            <th>CPM</th>
+                            <th>Cliques</th>
+                            <th>CTR</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Admin Panel Link - Will be shown/hidden by JS -->
+        <div class="admin-panel-link" id="admin-panel-btn" style="display: none;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+                <line x1="12" y1="8" x2="12" y2="6"></line>
+                <path d="M12 18v-2"></path>
+            </svg>
+        </div>
+    </div>
+
+    <div class="modal" id="admin-modal">
+        <div class="modal-content">
+            <span class="close-modal" id="close-admin-modal">&times;</span>
+            <h2>Painel Administrativo</h2>
+
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="clients">Gerenciar Clientes</button>
+                <button class="tab-btn" data-tab="accounts">Gerenciar Contas de Anúncio</button>
+                <button class="tab-btn" data-tab="api">Configurações API</button>
+            </div>
+
+            <div class="tab-content active" data-tab="clients">
+                <h3>Clientes</h3>
+                <button id="add-client-btn">Adicionar Cliente</button>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Senha</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clients-table">
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="tab-content" data-tab="accounts">
+                <h3>Contas de Anúncio</h3>
+                <div class="filter-row">
+                    <select id="client-select">
+                        <option value="">Filtrar por cliente</option>
+                    </select>
+                    <button id="add-account-btn">Adicionar Conta</button>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Cliente</th>
+                            <th>Nome da Conta</th>
+                            <th>ID da Conta</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="accounts-table">
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="tab-content" data-tab="api">
+                <h3>Configurações da API</h3>
+                <textarea id="api-key" rows="5" style="width: 100%; background-color: var(--secondary); color: var(--text); border: 1px solid var(--accent); padding: 1rem; border-radius: 5px;"></textarea>
+                <button id="save-api-btn" style="margin-top: 1rem;">Salvar Configurações</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="client-modal">
+        <div class="modal-content" style="max-width: 500px;">
+            <span class="close-modal" id="close-client-modal">&times;</span>
+            <h3 id="client-modal-title">Adicionar Cliente</h3>
+            <input type="hidden" id="client-id">
+            <input type="text" id="client-name" placeholder="Nome do Cliente">
+            <input type="password" id="client-password" placeholder="Senha">
+            <button id="save-client-btn">Salvar</button>
+        </div>
+    </div>
+
+    <div class="modal" id="account-modal">
+        <div class="modal-content" style="max-width: 500px;">
+            <span class="close-modal" id="close-account-modal">&times;</span>
+            <h3 id="account-modal-title">Adicionar Conta de Anúncio</h3>
+            <input type="hidden" id="account-id">
+            <select id="account-client-select">
+                <option value="">Selecione um cliente</option>
+            </select>
+            <input type="text" id="account-name" placeholder="Nome da Conta">
+            <input type="text" id="account-id-input" placeholder="ID da Conta">
+            <button id="save-account-btn">Salvar</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script type="importmap">
+        {
+            "imports": {
+                "./auth.js": "./auth.js",
+                "./facebook": "./facebook-api.js",
+                "./admin": "./admin.js",
+                "./dom": "./dom.js",
+                "./views.js": "./views.js",
+                "./admin-ui.js": "./admin-ui.js",
+                "./dashboard-ui.js": "./dashboard-ui.js",
+                "./auth-handlers.js": "./auth-handlers.js",
+                "./dashboard-handlers.js": "./dashboard-handlers.js",
+                "./admin-handlers.js": "./admin-handlers.js"
+            }
+        }
+    </script>
+    <script type="module" src="main.js"></script>
+</body>
+</html>
