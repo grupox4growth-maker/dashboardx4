@@ -1,0 +1,110 @@
+:root {
+    --background-color: #121212;
+    --surface-color: #1E1E1E;
+    --primary-color: #BB86FC;
+    --secondary-color: #03DAC6;
+    --error-color: #CF6679;
+    --text-color: #FFFFFF;
+    --heading-color: #E0E0E0;
+    --card-background: #1E1E1E;
+    --card-shadow: rgba(255, 255, 255, 0.1);
+    --table-header-color: #1E1E1E;
+    --table-border-color: #333333;
+    --button-background: #BB86FC;
+    --button-hover-background: #9B5DBB;
+}
+
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.header {
+    background: var(--surface-color);
+    padding: 20px;
+    text-align: center;
+}
+
+.sidebar {
+    background: var(--surface-color);
+    width: 250px;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    padding: 20px;
+    box-shadow: 2px 0px 5px var(--card-shadow);
+}
+
+.sidebar a {
+    color: var(--text-color);
+    text-decoration: none;
+    display: block;
+    padding: 10px;
+}
+
+.sidebar a:hover {
+    background: var(--primary-color);
+}
+
+.metric-card {
+    background: var(--card-background);
+    border-radius: 8px;
+    box-shadow: 0 2px 5px var(--card-shadow);
+    padding: 20px;
+    margin: 10px;
+}
+
+.filter {
+    margin: 10px;
+}
+
+button {
+    background-color: var(--button-background);
+    color: var(--text-color);
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: var(--button-hover-background);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table th {
+    background: var(--table-header-color);
+    color: var(--text-color);
+    padding: 10px;
+    border: 1px solid var(--table-border-color);
+}
+
+table td {
+    padding: 10px;
+    border: 1px solid var(--table-border-color);
+}
+
+.chart {
+    background: var(--card-background);
+    padding: 20px;
+    border-radius: 8px;
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+    }
+    .header {
+        text-align: left;
+    }
+}
